@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Card, CardContent, CardMedia, Typography, Grid, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const RecipeCard = ({ user }) => {
@@ -28,48 +27,49 @@ const RecipeCard = ({ user }) => {
   }, []);
 
   if (loading) {
-    return <Typography variant="h6">Loading recipes...</Typography>;
+    return <p className="text-lg text-center">Loading recipes...</p>;
   }
 
   if (error) {
-    return <Typography variant="h6" color="error">{error}</Typography>;
+    return <p className="text-lg text-red-600 text-center">{error}</p>;
   }
 
-  const handlePostClick = () => {
-    console.log("post");
+  const handlePostClick = (event) => {
+    event.stopPropagation(); // To prevent navigation when clicking the POST button
+    console.log('post');
   };
 
   return (
-    <Container>
-      <Grid container spacing={2}>
-        {recipes.map(recipe => (
-          <Grid item xs={12} sm={6} md={4} key={recipe.id}>
-            <Card onClick={() => navigate(`/recipes/${recipe.id}`)} style={{ cursor: 'pointer' }}>
-              <CardMedia
-                component="img"
-                alt={recipe.name}
-                height="140"
-                image={recipe.image_link || 'https://via.placeholder.com/140'}
-              />
-              <CardContent>
-                <Typography variant="h5" component="div">
-                  {recipe.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Ingredients: {recipe.ingredients}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Dietary Type: {recipe.dietary_type}
-                </Typography>
-                {user && (
-                  <Button variant="contained" onClick={handlePostClick}>POST</Button>
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
+    <div className="container mx-auto px-4 py-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {recipes.map((recipe) => (
+          <div
+            key={recipe.id}
+            className="bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer"
+            onClick={() => navigate(`/recipes/${recipe.id}`)}
+          >
+            <img
+              src={recipe.image_link || 'https://via.placeholder.com/140'}
+              alt={recipe.name}
+              className="w-full h-36 object-cover"
+            />
+            <div className="p-4">
+              <h5 className="text-lg font-semibold">{recipe.name}</h5>
+              <p className="text-gray-600 text-sm mt-2">Ingredients: {recipe.ingredients}</p>
+              <p className="text-gray-600 text-sm">Dietary Type: {recipe.dietary_type}</p>
+              {user && (
+                <button
+                  className="mt-4 bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600"
+                  onClick={handlePostClick}
+                >
+                  POST
+                </button>
+              )}
+            </div>
+          </div>
         ))}
-      </Grid>
-    </Container>
+      </div>
+    </div>
   );
 };
 

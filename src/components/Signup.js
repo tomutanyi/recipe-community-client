@@ -1,5 +1,4 @@
 import React from 'react';
-import { Container, TextField, Button, Typography, Grid } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +16,9 @@ const Signup = () => {
     validationSchema: Yup.object({
       username: Yup.string().required('Required'),
       email: Yup.string().email('Invalid email address').required('Required'),
-      password: Yup.string().required('Required').min(6, 'Password must be at least 6 characters'),
+      password: Yup.string()
+        .required('Required')
+        .min(6, 'Password must be at least 6 characters'),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], 'Passwords must match')
         .required('Required'),
@@ -47,78 +48,127 @@ const Signup = () => {
   });
 
   return (
-    <Container maxWidth="sm" style={{ marginTop: '2rem' }}>
-      <Typography variant="h4" gutterBottom align="center">
-        Sign Up
-      </Typography>
-      <form onSubmit={formik.handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg">
+        <h2 className="text-3xl font-bold text-center">Sign Up</h2>
+        <form onSubmit={formik.handleSubmit} className="space-y-4">
+          <div>
+            <label
+              htmlFor="username"
+              className="block mb-1 text-sm font-medium text-gray-700"
+            >
+              Username
+            </label>
+            <input
               id="username"
               name="username"
-              label="Username"
-              variant="outlined"
+              type="text"
+              className={`w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 ${
+                formik.touched.username && formik.errors.username
+                  ? 'border-red-500'
+                  : 'border-gray-300'
+              }`}
               value={formik.values.username}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.username && Boolean(formik.errors.username)}
-              helperText={formik.touched.username && formik.errors.username}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
+            {formik.touched.username && formik.errors.username && (
+              <div className="mt-1 text-sm text-red-500">
+                {formik.errors.username}
+              </div>
+            )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="email"
+              className="block mb-1 text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
+            <input
               id="email"
               name="email"
-              label="Email"
-              variant="outlined"
+              type="email"
+              className={`w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 ${
+                formik.touched.email && formik.errors.email
+                  ? 'border-red-500'
+                  : 'border-gray-300'
+              }`}
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
+            {formik.touched.email && formik.errors.email && (
+              <div className="mt-1 text-sm text-red-500">
+                {formik.errors.email}
+              </div>
+            )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="password"
+              className="block mb-1 text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <input
               id="password"
               name="password"
-              label="Password"
               type="password"
-              variant="outlined"
+              className={`w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 ${
+                formik.touched.password && formik.errors.password
+                  ? 'border-red-500'
+                  : 'border-gray-300'
+              }`}
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.password && Boolean(formik.errors.password)}
-              helperText={formik.touched.password && formik.errors.password}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
+            {formik.touched.password && formik.errors.password && (
+              <div className="mt-1 text-sm text-red-500">
+                {formik.errors.password}
+              </div>
+            )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="confirmPassword"
+              className="block mb-1 text-sm font-medium text-gray-700"
+            >
+              Confirm Password
+            </label>
+            <input
               id="confirmPassword"
               name="confirmPassword"
-              label="Confirm Password"
               type="password"
-              variant="outlined"
+              className={`w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 ${
+                formik.touched.confirmPassword && formik.errors.confirmPassword
+                  ? 'border-red-500'
+                  : 'border-gray-300'
+              }`}
               value={formik.values.confirmPassword}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
-              helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <Button color="primary" variant="contained" fullWidth type="submit">
-              Sign Up
-            </Button>
-          </Grid>
-        </Grid>
-      </form>
-    </Container>
+            {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+              <div className="mt-1 text-sm text-red-500">
+                {formik.errors.confirmPassword}
+              </div>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Sign Up
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
 

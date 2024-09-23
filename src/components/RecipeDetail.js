@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, Card, CardMedia, CardContent, List, ListItem, ListItemText, Button, TextField, Grid } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import { FaStar } from 'react-icons/fa';
 
 const RecipeDetail = () => {
   const { id } = useParams();
@@ -8,23 +8,19 @@ const RecipeDetail = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [rating, setRating] = useState('');
+  const [rating, setRating] = useState(0);
   const [commentary, setCommentary] = useState('');
 
   useEffect(() => {
     const fetchRecipeAndReviews = async () => {
       try {
         const recipeResponse = await fetch(`http://127.0.0.1:5000/recipes/${id}`);
-        if (!recipeResponse.ok) {
-          throw new Error('Failed to fetch recipe');
-        }
+        if (!recipeResponse.ok) throw new Error('Failed to fetch recipe');
         const recipeData = await recipeResponse.json();
         setRecipe(recipeData);
 
         const reviewsResponse = await fetch(`http://127.0.0.1:5000/recipes/${id}/reviews`);
-        if (!reviewsResponse.ok) {
-          throw new Error('Failed to fetch reviews');
-        }
+        if (!reviewsResponse.ok) throw new Error('Failed to fetch reviews');
         const reviewsData = await reviewsResponse.json();
         setReviews(reviewsData);
       } catch (err) {
@@ -54,113 +50,105 @@ const RecipeDetail = () => {
     try {
       const response = await fetch('http://127.0.0.1:5000/reviews', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(reviewData),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to post review');
-      }
+      if (!response.ok) throw new Error('Failed to post review');
 
       const data = await response.json();
-      console.log('Review posted successfully:', data);
-      setRating('');
+      setReviews((prevReviews) => [...prevReviews, data.review]);
+      setRating(0);
       setCommentary('');
-
-      setReviews([...reviews, data.review]);
     } catch (err) {
       console.error('Error:', err);
     }
   };
 
-  if (loading) {
-    return <Typography variant="h6">Loading...</Typography>;
-  }
+  const handleRatingClick = (value) => setRating(value);
 
-  if (error) {
-    return <Typography variant="h6" color="error">{error}</Typography>;
-  }
+  const renderStars = (ratingValue) => (
+    <div className="flex space-x-1">
+      {[1, 2, 3, 4, 5].map((value) => (
+        <FaStar
+          key={value}
+          size={20}
+          className={value <= ratingValue ? 'text-yellow-500' : 'text-gray-400'}
+        />
+      ))}
+    </div>
+  );
+
+  if (loading) return <p className="text-lg text-center">Loading...</p>;
+  if (error) return <p className="text-lg text-red-600 text-center">{error}</p>;
 
   return (
-    <Container>
+    <div className="container mx-auto p-6">
       {recipe && (
-        <Card>
-          <CardMedia
-            component="img"
+        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+          <img
+            src={recipe.image_link || 'https://via.placeholder.com/140'}
             alt={recipe.name}
-            height="140"
-            image={recipe.image_link || 'https://via.placeholder.com/140'}
+            className="w-full h-64 object-cover"
           />
-          <CardContent>
-            <Typography variant="h5">{recipe.name}</Typography>
-            <Typography variant="body2" color="text.secondary">
-              Ingredients: {recipe.ingredients}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Dietary Type: {recipe.dietary_type}
-            </Typography>
+          <div className="p-6">
+            <h2 className="text-2xl font-semibold">{recipe.name}</h2>
+            <p className="text-gray-700 mt-2">Ingredients: {recipe.ingredients}</p>
+            <p className="text-gray-700">Dietary Type: {recipe.dietary_type}</p>
 
-            {/* Display reviews */}
-            <Typography variant="h6">Reviews:</Typography>
-            <List>
-              {Array.isArray(reviews) && reviews.length > 0 ? (
-                reviews.map(review => (
-                  <ListItem key={review.id}>
-                    <ListItemText
-                      primary={`Rating: ${review.rating}`}
-                      secondary={review.commentary}
-                    />
-                  </ListItem>
+            <h3 className="text-xl font-semibold mt-6">Reviews:</h3>
+            <ul className="mt-4">
+              {reviews.length > 0 ? (
+                reviews.map((review) => (
+                  <li key={review.id} className="border-b border-gray-200 py-2">
+                    <div className="flex items-center">
+                      {renderStars(review.rating)}
+                    </div>
+                    <p className="text-gray-600 mt-2">{review.commentary}</p>
+                  </li>
                 ))
               ) : (
-                <ListItem>
-                  <ListItemText primary="No reviews available." />
-                </ListItem>
+                <li className="py-2">
+                  <p className="text-gray-600">No reviews available.</p>
+                </li>
               )}
-            </List>
+            </ul>
 
-            {/* Form for submitting reviews */}
-            <Typography variant="h6" style={{ marginTop: '1rem' }}>Leave a Review:</Typography>
-            <Grid container spacing={2} alignItems="center">
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Rating"
-                  type="number"
-                  value={rating}
-                  onChange={(e) => setRating(e.target.value)}
-                  fullWidth
-                  required
-                  inputProps={{ min: 1, max: 5 }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={12}>
-                <TextField
-                  label="Commentary"
-                  multiline
-                  rows={4}
+            <h3 className="text-xl font-semibold mt-6">Leave a Review:</h3>
+            <div className="mt-4">
+              <div className="mb-4">
+                <div className="flex space-x-1">
+                  {Array.from({ length: 5 }, (_, index) => (
+                    <FaStar
+                      key={index + 1}
+                      size={24}
+                      className={`cursor-pointer ${index + 1 <= rating ? 'text-yellow-500' : 'text-gray-400'}`}
+                      onClick={() => handleRatingClick(index + 1)}
+                    />
+                  ))}
+                </div>
+              </div>
+              <div className="mb-4">
+                <textarea
+                  rows="4"
                   value={commentary}
                   onChange={(e) => setCommentary(e.target.value)}
-                  fullWidth
-                  required
+                  placeholder="Commentary"
+                  className="w-full p-2 border border-gray-300 rounded"
                 />
-              </Grid>
-            </Grid>
+              </div>
 
-            {/* POST button for submitting reviews */}
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handlePostClick}
-              style={{ marginTop: '1rem' }}
-            >
-              POST REVIEW
-            </Button>
-          </CardContent>
-        </Card>
+              <button
+                onClick={handlePostClick}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                POST REVIEW
+              </button>
+            </div>
+          </div>
+        </div>
       )}
-    </Container>
+    </div>
   );
 };
 

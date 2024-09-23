@@ -1,44 +1,56 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 const Navbar = ({ user, onLogout }) => {
   return (
-    <AppBar position="static">
-      <Container>
-        <Toolbar>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            Recipe Community
-          </Typography>
+    <nav className="bg-blue-600 p-4">
+      <div className="container mx-auto flex items-center justify-between">
+        <div className="text-white text-lg font-bold">
+          <Link to="/">Recipe Community</Link>
+        </div>
 
+        <div className="flex items-center space-x-4">
           {user ? (
             <>
-              <Typography variant="body1" style={{ marginRight: '1rem' }}>
-                Welcome, {user.username}!
-              </Typography>
-              <Button color="inherit" component={Link} to="/my-reviews">
+              <span className="text-white">Welcome, {user.username}!</span>
+              <Link
+                to="/my-reviews"
+                className="text-white hover:bg-blue-700 px-3 py-2 rounded-md"
+              >
                 My Reviews
-              </Button>
-              <Button color="inherit" onClick={onLogout}>
+              </Link>
+              <button
+                onClick={onLogout}
+                className="text-white hover:bg-blue-700 px-3 py-2 rounded-md"
+              >
                 Logout
-              </Button>
+              </button>
             </>
           ) : (
             <>
-              <Button color="inherit" component={Link} to="/">
+              <Link
+                to="/"
+                className="text-white hover:bg-blue-700 px-3 py-2 rounded-md"
+              >
                 Home
-              </Button>
-              <Button color="inherit" component={Link} to="/login">
+              </Link>
+              <Link
+                to="/login"
+                className="text-white hover:bg-blue-700 px-3 py-2 rounded-md"
+              >
                 Login
-              </Button>
-              <Button color="inherit" component={Link} to="/signup">
+              </Link>
+              <Link
+                to="/signup"
+                className="text-white hover:bg-blue-700 px-3 py-2 rounded-md"
+              >
                 Signup
-              </Button>
+              </Link>
             </>
           )}
-        </Toolbar>
-      </Container>
-    </AppBar>
+        </div>
+      </div>
+    </nav>
   );
 };
 
