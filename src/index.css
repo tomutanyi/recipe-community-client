@@ -15,3 +15,17 @@ code {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.recipe-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+}
+
+.recipe-card:hover {
+  transform: scale(1.1); /* Scale up on hover */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Brighten the shadow */
+}
+

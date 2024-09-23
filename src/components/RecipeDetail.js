@@ -99,8 +99,12 @@ const RecipeDetail = () => {
             className="w-full h-64 object-cover"
           />
           <div className="p-6">
-            <h2 className="text-2xl font-semibold">{recipe.name}</h2>
-            <p className="text-gray-700 mt-2">Ingredients: {recipe.ingredients}</p>
+            <h1 className="text-3xl font-semibold">{recipe.name}</h1>
+            <h5 className="text-2xl font-semibold">Ingredients</h5>
+            <p className="text-gray-700 mt-2">{recipe.ingredients}</p>
+            <h5 className="text-2xl font-semibold">Instructions</h5>
+            <p className="text-gray-700 mt-2">{recipe.instructions}</p>
+
             <p className="text-gray-700">Dietary Type: {recipe.dietary_type}</p>
 
             <h3 className="text-xl font-semibold mt-6">Reviews:</h3>
@@ -110,6 +114,7 @@ const RecipeDetail = () => {
                   <li key={review.id} className="border-b border-gray-200 py-2">
                     <div className="flex items-center">
                       {renderStars(review.rating)}
+                      <span className="ml-2 text-gray-700">{review.user.username}</span>
                     </div>
                     <p className="text-gray-600 mt-2">{review.commentary}</p>
                   </li>

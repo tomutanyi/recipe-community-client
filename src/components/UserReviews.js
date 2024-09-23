@@ -97,12 +97,11 @@ const UserReviews = ({ user }) => {
 
   return (
     <div className="container mx-auto p-6">
-      <h2 className="text-3xl font-bold mb-4">User Reviews</h2>
+      <h2 className="text-3xl font-bold mb-4">My Reviews</h2>
       <div className="grid grid-cols-1 gap-4">
         {reviews.length > 0 ? (
           reviews.map(review => (
             <div key={review.id} className="bg-white shadow-lg rounded-lg p-4">
-              <h3 className="text-xl font-semibold">{review.recipe_listing.name}</h3>
               <StarRating rating={review.rating} />
               <p className="text-gray-700 mt-2">{review.commentary}</p>
               <button 
