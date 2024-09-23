@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
+import { Alert, Snackbar } from '@mui/material';
 
 const RecipeDetail = () => {
   const { id } = useParams();
@@ -10,6 +11,7 @@ const RecipeDetail = () => {
   const [error, setError] = useState(null);
   const [rating, setRating] = useState(0);
   const [commentary, setCommentary] = useState('');
+  const [openAlert, setOpenAlert] = useState(false);
 
   useEffect(() => {
     const fetchRecipeAndReviews = async () => {
@@ -36,26 +38,26 @@ const RecipeDetail = () => {
   const handlePostClick = async () => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user) {
-      console.log('User is not logged in');
-      return;
+      setOpenAlert(true);
+      return; // Prevent further execution if the user is not logged in
     }
-
+  
     const reviewData = {
       recipe_listing_id: recipe.id,
       rating: parseInt(rating),
       commentary,
       user_id: user.id,
     };
-
+  
     try {
       const response = await fetch('http://127.0.0.1:5000/reviews', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(reviewData),
       });
-
+  
       if (!response.ok) throw new Error('Failed to post review');
-
+  
       const data = await response.json();
       setReviews((prevReviews) => [...prevReviews, data.review]);
       setRating(0);
@@ -64,6 +66,7 @@ const RecipeDetail = () => {
       console.error('Error:', err);
     }
   };
+  
 
   const handleRatingClick = (value) => setRating(value);
 
@@ -78,6 +81,10 @@ const RecipeDetail = () => {
       ))}
     </div>
   );
+
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
+  };
 
   if (loading) return <p className="text-lg text-center">Loading...</p>;
   if (error) return <p className="text-lg text-red-600 text-center">{error}</p>;
@@ -148,8 +155,14 @@ const RecipeDetail = () => {
           </div>
         </div>
       )}
+      <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+        <Alert onClose={handleCloseAlert} severity="warning">
+          User is not logged in!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
 
 export default RecipeDetail;
+ 
