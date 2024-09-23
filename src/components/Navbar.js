@@ -1,7 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = ({ user, onLogout }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    onLogout();
+    navigate('/'); // Navigate to the landing page after logout
+  };
+
   return (
     <nav className="bg-blue-600 p-4">
       <div className="container mx-auto flex items-center justify-between">
@@ -20,7 +27,7 @@ const Navbar = ({ user, onLogout }) => {
                 My Reviews
               </Link>
               <button
-                onClick={onLogout}
+                onClick={handleLogout}
                 className="text-white hover:bg-blue-700 px-3 py-2 rounded-md"
               >
                 Logout
