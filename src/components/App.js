@@ -4,6 +4,11 @@ import Navbar from './Navbar';
 import Landing from './Landing';
 import Signup from './Signup';
 import Login from './Login';
+import RecipeCard from './RecipeCard';
+import RecipeDetail from './RecipeDetail';
+import UserReviews from './UserReviews';
+
+
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -32,6 +37,9 @@ const App = () => {
         <Route path="/" element={<Landing />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route path="/recipes" element={<RecipeCard user={user} />} />
+        <Route path="/recipes/:id" element={<RecipeDetail />} />
+        <Route path="/my-reviews" element={<UserReviews user={user} />} />
       </Routes>
     </Router>
   );

@@ -16,6 +16,9 @@ const Navbar = ({ user, onLogout }) => {
               <Typography variant="body1" style={{ marginRight: '1rem' }}>
                 Welcome, {user.username}!
               </Typography>
+              <Button color="inherit" component={Link} to="/my-reviews">
+                My Reviews
+              </Button>
               <Button color="inherit" onClick={onLogout}>
                 Logout
               </Button>
