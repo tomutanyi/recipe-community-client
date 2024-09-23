@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Grid, Card, CardContent, Button } from '@mui/material';
 
 const StarRating = ({ rating }) => {
   return (
     <div>
       {Array.from({ length: 5 }, (_, index) => (
-        <span key={index} style={{ color: index < rating ? 'gold' : 'lightgray' }}>
+        <span key={index} className={index < rating ? 'text-yellow-500' : 'text-gray-300'}>
           ★
         </span>
       ))}
@@ -24,7 +23,7 @@ const UserReviews = ({ user }) => {
 
       try {
         const response = await fetch(`http://127.0.0.1:5000/users/${user.id}/reviews`);
-        if (!response.ok) throw new Error('Failed to fetch reviews');
+        if (!response.ok) throw new Error('No reviews yet :(');
 
         const data = await response.json();
         setReviews(data);
@@ -52,42 +51,36 @@ const UserReviews = ({ user }) => {
   };
 
   if (loading) {
-    return <Typography variant="h6">Loading reviews...</Typography>;
+    return <p className="text-lg text-center">Loading reviews...</p>;
   }
 
   if (error) {
-    return <Typography variant="h6" color="error">{error}</Typography>;
+    return <p className="text-lg text-red-600 text-center">{error}</p>;
   }
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>User Reviews</Typography>
-      <Grid container spacing={2}>
+    <div className="container mx-auto p-6">
+      <h2 className="text-3xl font-bold mb-4">User Reviews</h2>
+      <div className="grid grid-cols-1 gap-4">
         {reviews.length > 0 ? (
           reviews.map(review => (
-            <Grid item xs={12} key={review.id}>
-              <Card>
-                <CardContent>
-                  <Typography variant="h6">{review.recipe_listing.name}</Typography>
-                  <StarRating rating={review.rating} />
-                  <Typography variant="body2">{review.commentary}</Typography>
-                  <Button 
-                    variant="contained" 
-                    color="secondary" 
-                    onClick={() => handleDelete(review.id)} 
-                    style={{ marginTop: '10px' }}
-                  >
-                    Delete Review
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
+            <div key={review.id} className="bg-white shadow-lg rounded-lg p-4">
+              <h3 className="text-xl font-semibold">{review.recipe_listing.name}</h3>
+              <StarRating rating={review.rating} />
+              <p className="text-gray-700 mt-2">{review.commentary}</p>
+              <button 
+                onClick={() => handleDelete(review.id)} 
+                className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >
+                Delete Review
+              </button>
+            </div>
           ))
         ) : (
-          <Typography variant="h6">No reviews yet.</Typography>
+          <p className="text-lg text-center">No reviews yet.</p>
         )}
-      </Grid>
-    </Container>
+      </div>
+    </div>
   );
 };
 
