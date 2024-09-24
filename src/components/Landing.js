@@ -1,41 +1,63 @@
-import React from 'react';
-import { Container, Typography, Button, Box } from '@mui/material';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import RecipeCard from './RecipeCard';
 
 const Landing = () => {
-  return (
-    <Container maxWidth="md" style={{ textAlign: 'center', marginTop: '4rem' }}>
-      <Typography variant="h2" gutterBottom>
-        Welcome to Recipe Community
-      </Typography>
-      <Typography variant="h5" gutterBottom>
-        Share and discover amazing recipes from all over the world.
-      </Typography>
-      <Box mt={4}>
-        <Button variant="contained" color="primary" size="large" component={Link} to="/signup">
-          Get Started
-        </Button>
-      </Box>
+  const [filter, setFilter] = useState('all'); // Default filter is 'all'
 
-      <Box mt={4}>
-        <Typography variant="h4" gutterBottom>
-          Latest Recipes
-        </Typography>
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
-          <div style={{ margin: '1rem' }}>
-            <RecipeCard />
-          </div>
-          <div style={{ margin: '1rem' }}>
-            <RecipeCard />
-          </div>
-          <div style={{ margin: '1rem' }}>
-            <RecipeCard />
-          </div>
-          {/* Add more RecipeCards as needed */}
+  return (
+    <div className="container mx-auto text-center mt-16">
+      <h1 className="text-4xl font-bold mb-6">
+        Welcome to Recipe Community
+      </h1>
+      <p className="text-xl mb-6">
+        Share and discover amazing recipes from all over the world.
+      </p>
+
+      {/* Filter Buttons */}
+      <div className="mt-8 flex justify-center space-x-4">
+        <button
+          onClick={() => setFilter('all')}
+          className="bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded"
+        >
+          All
+        </button>
+        <button
+          onClick={() => setFilter('Vegan')}
+          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Vegan
+        </button>
+        <button
+          onClick={() => setFilter('Vegetarian')}
+          className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Vegetarian
+        </button>
+        <button
+          onClick={() => setFilter('Non-Vegetarian')}
+          className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Non-Vegetarian
+        </button>
+      </div>
+
+      <div className="mt-8">
+        <Link
+          to="/signup"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded inline-block"
+        >
+          Get Started
+        </Link>
+      </div>
+
+      <div className="mt-16">
+        <h2 className="text-2xl font-bold mb-4">Latest Recipes</h2>
+        <div className="flex flex-wrap justify-center space-x-4">
+          <RecipeCard filter={filter} />
         </div>
-      </Box>
-    </Container>
+      </div>
+    </div>
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const RecipeCard = ({ user }) => {
+const RecipeCard = ({ filter }) => {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -34,11 +34,16 @@ const RecipeCard = ({ user }) => {
     return <p className="text-lg text-red-600 text-center">{error}</p>;
   }
 
+  // Filter recipes based on the selected dietary filter
+  const filteredRecipes = recipes.filter((recipe) => {
+    if (filter === 'all') return true;
+    return recipe.dietary_type === filter;
+  });
 
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {recipes.map((recipe) => (
+        {filteredRecipes.map((recipe) => (
           <div
             key={recipe.id}
             className="recipe-card bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer"
