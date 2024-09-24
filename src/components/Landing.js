@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Container, Typography, Button, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import RecipeCard from './RecipeCard';
 
@@ -7,37 +6,58 @@ const Landing = () => {
   const [filter, setFilter] = useState('all'); // Default filter is 'all'
 
   return (
-    <Container maxWidth="md" style={{ textAlign: 'center', marginTop: '4rem' }}>
-      <Typography variant="h2" gutterBottom>
+    <div className="container mx-auto text-center mt-16">
+      <h1 className="text-4xl font-bold mb-6">
         Welcome to Recipe Community
-      </Typography>
-      <Typography variant="h5" gutterBottom>
+      </h1>
+      <p className="text-xl mb-6">
         Share and discover amazing recipes from all over the world.
-      </Typography>
+      </p>
 
       {/* Filter Buttons */}
-      <Box mt={4}>
-        <Button variant="outlined" onClick={() => setFilter('all')}>All</Button>
-        <Button variant="outlined" onClick={() => setFilter('Vegan')}>Vegan</Button>
-        <Button variant="outlined" onClick={() => setFilter('Vegetarian')}>Vegetarian</Button>
-        <Button variant="outlined" onClick={() => setFilter('Non-Vegetarian')}>Non-Vegetarian</Button>
-      </Box>
+      <div className="mt-8 flex justify-center space-x-4">
+        <button
+          onClick={() => setFilter('all')}
+          className="bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded"
+        >
+          All
+        </button>
+        <button
+          onClick={() => setFilter('Vegan')}
+          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Vegan
+        </button>
+        <button
+          onClick={() => setFilter('Vegetarian')}
+          className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Vegetarian
+        </button>
+        <button
+          onClick={() => setFilter('Non-Vegetarian')}
+          className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Non-Vegetarian
+        </button>
+      </div>
 
-      <Box mt={4}>
-        <Button variant="contained" color="primary" size="large" component={Link} to="/signup">
+      <div className="mt-8">
+        <Link
+          to="/signup"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded inline-block"
+        >
           Get Started
-        </Button>
-      </Box>
+        </Link>
+      </div>
 
-      <Box mt={4}>
-        <Typography variant="h4" gutterBottom>
-          Latest Recipes
-        </Typography>
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
+      <div className="mt-16">
+        <h2 className="text-2xl font-bold mb-4">Latest Recipes</h2>
+        <div className="flex flex-wrap justify-center space-x-4">
           <RecipeCard filter={filter} />
         </div>
-      </Box>
-    </Container>
+      </div>
+    </div>
   );
 };
 
