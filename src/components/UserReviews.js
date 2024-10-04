@@ -25,7 +25,7 @@ const UserReviews = ({ user }) => {
       if (!user) return;
 
       try {
-        const response = await fetch(`http://127.0.0.1:5000/users/${user.id}/reviews`);
+        const response = await fetch(`https://recipe-community-server-1.onrender.com/users/${user.id}/reviews`);
         if (!response.ok) throw new Error('No reviews yet :(');
 
         const data = await response.json();
@@ -43,7 +43,7 @@ const UserReviews = ({ user }) => {
   const handleDelete = async (reviewId) => {
     if (window.confirm("Are you sure you want to delete this review?")) {
       try {
-        const response = await fetch(`http://127.0.0.1:5000/reviews/${reviewId}`, { method: 'DELETE' });
+        const response = await fetch(`https://recipe-community-server-1.onrender.com/reviews/${reviewId}`, { method: 'DELETE' });
         if (!response.ok) throw new Error('Failed to delete review');
 
         setReviews(prevReviews => prevReviews.filter(review => review.id !== reviewId));
@@ -69,7 +69,7 @@ const UserReviews = ({ user }) => {
     };
 
     try {
-      const response = await fetch(`http://127.0.0.1:5000/reviews/${editReview.id}`, {
+      const response = await fetch(`https://recipe-community-server-1.onrender.com/reviews/${editReview.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedReview),
