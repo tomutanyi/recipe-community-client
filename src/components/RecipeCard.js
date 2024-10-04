@@ -10,7 +10,7 @@ const RecipeCard = ({ filter }) => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/recipes');
+        const response = await fetch('https://recipe-community-server-1.onrender.com/recipes');
         if (!response.ok) {
           throw new Error('Failed to fetch recipes');
         }

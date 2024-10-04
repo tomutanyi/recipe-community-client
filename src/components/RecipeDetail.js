@@ -16,12 +16,12 @@ const RecipeDetail = () => {
   useEffect(() => {
     const fetchRecipeAndReviews = async () => {
       try {
-        const recipeResponse = await fetch(`http://127.0.0.1:5000/recipes/${id}`);
+        const recipeResponse = await fetch(`https://recipe-community-server-1.onrender.com/recipes/${id}`);
         if (!recipeResponse.ok) throw new Error('Failed to fetch recipe');
         const recipeData = await recipeResponse.json();
         setRecipe(recipeData);
 
-        const reviewsResponse = await fetch(`http://127.0.0.1:5000/recipes/${id}/reviews`);
+        const reviewsResponse = await fetch(`https://recipe-community-server-1.onrender.com/recipes/${id}/reviews`);
         if (!reviewsResponse.ok) throw new Error('Failed to fetch reviews');
         const reviewsData = await reviewsResponse.json();
         setReviews(reviewsData);
@@ -50,7 +50,7 @@ const RecipeDetail = () => {
     };
   
     try {
-      const response = await fetch('http://127.0.0.1:5000/reviews', {
+      const response = await fetch('https://recipe-community-server-1.onrender.com/reviews', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(reviewData),
